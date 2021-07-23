@@ -1,10 +1,9 @@
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.AzureAD.UI;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -12,6 +11,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using TicketSystemNWF.Data;
+using TicketSystemNWF.Models;
 
 namespace TicketSystemNWF
 {
@@ -27,17 +28,31 @@ namespace TicketSystemNWF
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            /*services.AddAuthentication(AzureADDefaults.AuthenticationScheme)
-                .AddAzureAD(options => Configuration.Bind("AzureAd", options));*/
-
-            //services.AddAuthentication();
-            /*services.AddControllersWithViews(options =>
+            services.AddDbContext<ApplicationDbContext>(options =>
+                options.UseSqlServer(
+                    Configuration.GetConnectionString("DefaultConnection")));
+            /*services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+                .AddEntityFrameworkStores<ApplicationDbContext>();*/
+            services.AddIdentity<ApplicationUser, IdentityRole>(options =>
             {
-                var policy = new AuthorizationPolicyBuilder()
-                    .RequireAuthenticatedUser()
-                    .Build();
-                options.Filters.Add(new AuthorizeFilter(policy));
-            });*/
+                /*options.Password.RequiredLength = 8;*/
+                options.SignIn.RequireConfirmedAccount = false;
+
+            })
+               .AddRoles<IdentityRole>()
+                .AddDefaultTokenProviders()
+               .AddDefaultUI()
+               .AddEntityFrameworkStores<ApplicationDbContext>();
+
+            services.AddAuthorization(options => {
+                options.AddPolicy("Manager",
+                    builder => builder.RequireRole("Manager"));
+                options.AddPolicy("Developer",
+                    builder => builder.RequireRole("Developer"));
+                options.AddPolicy("Admin",
+                    builder => builder.RequireRole("Administrator"));
+            });
+
             services.AddControllersWithViews();
             services.AddRazorPages();
         }
@@ -48,6 +63,7 @@ namespace TicketSystemNWF
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                app.UseDatabaseErrorPage();
             }
             else
             {
