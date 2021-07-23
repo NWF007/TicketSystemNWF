@@ -54,8 +54,7 @@ steps:
     projects: '**/*.csproj'
     arguments: '--configuration $(buildConfiguration)'
 
-- script: dotnet publish -c Release -o build / 
-p:PackageAsSingleFile=true
+- script: dotnet publish -c Release -o build / p:PackageAsSingleFile=true
   displayName: Publish
 
 - script: tar -a -c -C build -f Application.zip *.*
@@ -69,4 +68,3 @@ p:PackageAsSingleFile=true
     appType: AzureWebApp
     package: ./**/*.zip
 
-    
