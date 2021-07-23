@@ -68,3 +68,5 @@ p:PackageAsSingleFile=true
     appName: 'TicketSystemNWF'
     appType: AzureWebApp
     package: ./**/*.zip
+
+    
