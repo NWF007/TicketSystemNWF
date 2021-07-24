@@ -11,10 +11,10 @@ namespace TicketSystemNWF.Models
         public int TicketId { get; set; }
 
         [ForeignKey(nameof(TicketLogger)), Column(Order = 0)]
-        public int LoggedBy { get; set; }
+        public string LoggedBy { get; set; }
 
         [ForeignKey(nameof(Assignee)), Column(Order = 1)]
-        public int AssignedTo { get; set; }
+        public string AssignedTo { get; set; }
         public int ProjectId { get; set; }
         public int PriorityId { get; set; }
         public int TicketStatusId { get; set; }

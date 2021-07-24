@@ -13,7 +13,7 @@ namespace TicketSystemNWF.Models
         public int TicketCommentId { get; set; }
         public string Comment { get; set; }
         public DateTime CommentDate { get; set; }
-        public int UserId { get; set; }
+        public string UserId { get; set; }
         public int TicketId { get; set; }
 
         [ForeignKey("TicketId")]

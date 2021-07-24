@@ -30,7 +30,8 @@ namespace TicketSystemNWF
         {
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
-                    Configuration.GetConnectionString("DefaultConnection")));
+                    //Configuration.GetConnectionString("DefaultConnection")));
+                    Environment.GetEnvironmentVariable("ConnectionStrings__DefaultConnection")));
             /*services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>();*/
             services.AddIdentity<ApplicationUser, IdentityRole>(options =>
