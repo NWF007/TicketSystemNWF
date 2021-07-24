@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using TicketSystemNWF.Data;
 using TicketSystemNWF.Models;
 
 namespace TicketSystemNWF.Controllers
@@ -12,15 +13,18 @@ namespace TicketSystemNWF.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly ApplicationDbContext dbContext;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, ApplicationDbContext dbContext)
         {
             _logger = logger;
+            this.dbContext = dbContext;
         }
 
         public IActionResult Index()
         {
-            return View();
+            TicketStatus status = dbContext.Statuses.FirstOrDefault();
+            return View(status);
         }
 
         public IActionResult Privacy()
