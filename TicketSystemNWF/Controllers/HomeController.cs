@@ -23,8 +23,8 @@ namespace TicketSystemNWF.Controllers
 
         public IActionResult Index()
         {
-            TicketStatus status = dbContext.Statuses.FirstOrDefault();
-            return View(status);
+            //TicketStatus status = dbContext.Statuses.FirstOrDefault();
+            return View();
         }
 
         public IActionResult Privacy()

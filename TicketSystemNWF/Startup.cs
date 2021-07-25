@@ -36,8 +36,13 @@ namespace TicketSystemNWF
                 .AddEntityFrameworkStores<ApplicationDbContext>();*/
             services.AddIdentity<ApplicationUser, IdentityRole>(options =>
             {
-                /*options.Password.RequiredLength = 8;*/
+                options.Password.RequiredLength = 8;
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequireLowercase = false;
+                options.Password.RequireUppercase = false;
                 options.SignIn.RequireConfirmedAccount = false;
+                options.SignIn.RequireConfirmedEmail = false;
+                options.SignIn.RequireConfirmedPhoneNumber = false;
 
             })
                .AddRoles<IdentityRole>()
