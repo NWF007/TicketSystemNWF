@@ -11,6 +11,6 @@ namespace TicketSystemNWF.Repositories
         void AddComment(TicketComment comment);
         IEnumerable<TicketComment> GetTicketComments(int ticketID);
         void EditComment(TicketComment ticketComment);
-        void DeleteComment();
+        void DeleteComment(int commentID);
     }
 }

@@ -1,31 +1,66 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using TicketSystemNWF.Data;
 using TicketSystemNWF.Models;
 
 namespace TicketSystemNWF.Repositories
 {
     public class TicketCommentRepository : ITicketCommentRepository
     {
+        private readonly ApplicationDbContext dbContext;
+
+        public TicketCommentRepository(ApplicationDbContext dbContext)
+        {
+            this.dbContext = dbContext;
+        }
         public void AddComment(TicketComment comment)
         {
-            throw new NotImplementedException();
+            dbContext.Comments.Add(comment);
+
+            try
+            {
+                dbContext.SaveChanges();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                throw;
+            }
         }
 
-        public void DeleteComment()
+        public void DeleteComment(int commentID)
         {
-            throw new NotImplementedException();
+            var comment = dbContext.Comments.FirstOrDefault(x => x.TicketCommentId == commentID);
+
+            dbContext.Comments.Remove(comment);
+            try
+            {
+                dbContext.SaveChanges();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                throw;
+            }
         }
 
         public void EditComment(TicketComment ticketComment)
         {
-            throw new NotImplementedException();
+            dbContext.Entry(ticketComment).State = EntityState.Modified;
+            try
+            {
+                dbContext.SaveChanges();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                throw;
+            }
         }
 
         public IEnumerable<TicketComment> GetTicketComments(int ticketID)
         {
-            throw new NotImplementedException();
+            return dbContext.Comments.Where(x => x.TicketId == ticketID);
         }
     }
 }
