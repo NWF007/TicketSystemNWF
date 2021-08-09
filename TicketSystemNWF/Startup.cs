@@ -1,3 +1,4 @@
+using Azure.Storage.Blobs;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -13,6 +14,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using TicketSystemNWF.Data;
 using TicketSystemNWF.Models;
+using TicketSystemNWF.Repositories;
 
 namespace TicketSystemNWF
 {
@@ -58,6 +60,12 @@ namespace TicketSystemNWF
                 options.AddPolicy("Admin",
                     builder => builder.RequireRole("Administrator"));
             });
+
+            // add azure blob storage
+            services.AddSingleton(x => new BlobServiceClient(
+                Environment.GetEnvironmentVariable("AzureBlobStorageConnectionString")
+                ));
+            services.AddSingleton<IBlobRepository, BlobRepository>();
 
             services.AddControllersWithViews();
             services.AddRazorPages();
